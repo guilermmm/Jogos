@@ -17,6 +17,17 @@
 #include <sstream>
 using std::stringstream;
 
+int speedX = 3;
+int speedY = 3;
+
+LPPOINT lp;
+
+struct Point
+{
+	int x;
+	int y;
+};
+
 // ------------------------------------------------------------------------------
 
 class WinGame : public Game
@@ -25,6 +36,11 @@ private:
 	stringstream textSize;
 	stringstream textMode;
 	stringstream textMouse;
+
+	Point p1 = { 0,0 };
+	Point p2 = { 0,0 };
+	Point speed1 = { 5,7 };
+	Point speed2 = { 12,14 };
 
 public:
 	void Init();
@@ -45,11 +61,24 @@ void WinGame::Init()
 
 void WinGame::Update()
 {
-	if (window->KeyDown(VK_ESCAPE))
-		window->Close();
+	if (p1.x < 0 || p1.x > window->Width()) {
+		speed1.x = -speed1.x;
+	}
+	if (p1.y < 0 || p1.y > window->Height()) {
+		speed1.y = -speed1.y;
+	}
 
-	textMouse.str("");
-	textMouse << window->MouseX() << " x " << window->MouseY();
+	if (p2.x < 0 || p2.x > window->Width()) {
+		speed2.x = -speed2.x;
+	}
+	if (p2.y < 0 || p2.y > window->Height()) {
+		speed2.y = -speed2.y;
+	}
+
+	p1.x += speed1.x;
+	p1.y += speed1.y;
+	p2.x += speed2.x;
+	p2.y += speed2.y;
 } 
 
 // ------------------------------------------------------------------------------
@@ -60,6 +89,19 @@ void WinGame::Draw()
 	window->Print(textSize.str(), 10, 50, RGB(0,0,0)); 
 	window->Print(textMode.str(), 10, 70, RGB(0,0,0)); 
 	window->Print(textMouse.str(), 10, 90, RGB(0, 0, 0));
+
+	HDC hdc = GetDC(window->Id());
+
+	MoveToEx(
+		hdc, // contexto do dispositivo
+		p1.x, // posição no eixo x
+		p1.y, // posição no eixo y
+		lp // guarda última coordenada em um POINT
+	);
+
+	LineTo(hdc, p2.x,p2.y);
+
+	ReleaseDC(window->Id(), hdc);
 } 
 
 // ------------------------------------------------------------------------------
