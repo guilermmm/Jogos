@@ -64,6 +64,10 @@ void FPSCounter::Finalize()
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
                      _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
+
+    Timer timer = Timer();
+    timer.Start();
+
     // cria engine
     Engine * engine = new Engine();
 
@@ -77,6 +81,14 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     // configura dispositivo gráfico
     //engine->graphics->VSync(true);
+
+    timer.Stop();
+    float time = timer.Elapsed();
+
+    stringstream output;
+    output << "Tempo de Inicialização: " << (time * 1000) << "ms" << std::endl;
+
+    OutputDebugString(output.str().c_str());
 
     // inicia o jogo
     int status = engine->Start(new FPSCounter());
