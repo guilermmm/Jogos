@@ -15,17 +15,26 @@
 
 Frogger::Frogger()
 {
-    sprite = new Sprite("Resources/frog.png");
-    MoveTo(window->CenterX() - sprite->Width()/2.0f, 545.0f, Layer::FRONT);
+    spriteUp = new Sprite("Resources/frog.png");
+    spriteDown = new Sprite("Resources/frogDown.png");
+    spriteLeft = new Sprite("Resources/frogLeft.png");
+    spriteRight = new Sprite("Resources/frogRight.png");
+    MoveTo(window->CenterX(), 560.0f, Layer::FRONT);
     ctrlUp = true;
     ctrlDown = true;
+    ctrlLeft = true;
+    ctrlRight = true;
+    state = UP;
 }
 
 // ---------------------------------------------------------------------------------
 
 Frogger::~Frogger()
 {
-    delete sprite;
+    delete spriteUp;
+    delete spriteDown;
+    delete spriteLeft;
+    delete spriteRight;
 }
 
 // ---------------------------------------------------------------------------------
@@ -37,6 +46,7 @@ void Frogger::Update()
     {
         Translate(0.0f, -40.0f);
         ctrlUp = false;
+        state = UP;
     }
     else if (window->KeyUp(VK_UP))
     {
@@ -48,18 +58,77 @@ void Frogger::Update()
     {
         Translate(0.0f, 40.0f);
         ctrlDown = false;
+        state = DOWN;
     }
     else if (window->KeyUp(VK_DOWN))
     {
         ctrlDown = true;
     }
+
+    // desloca sapo para esquerda
+    if (ctrlLeft && window->KeyDown(VK_LEFT))
+    {
+        Translate(-40.0f, 0.0f);
+        ctrlLeft = false;
+        state = LEFT;
+    }
+    else if (window->KeyUp(VK_LEFT))
+    {
+        ctrlLeft = true;
+    }
+
+    // desloca sapo para direita
+    if (ctrlRight && window->KeyDown(VK_RIGHT))
+    {
+        Translate(40.0f, 0.0f);
+        ctrlRight = false;
+        state = RIGHT;
+    }
+    else if (window->KeyUp(VK_RIGHT))
+    {
+        ctrlRight = true;
+    }
     
     // mantém sapo dentro da tela
-    if (y < 65)
-        MoveTo(x, 65);
+    // eixo y
+    if (y < 80)
+        MoveTo(x, 80);
 
-    if (y > 545)
-        MoveTo(x, 545);
+    if (y > 560)
+        MoveTo(x, 560);
+
+
+    // eixo x
+    if (x < 20)
+        MoveTo(20, y);
+    if (x > 780)
+        MoveTo(780, y);
 }
 
 // ---------------------------------------------------------------------------------
+
+void Frogger::Draw() {
+
+    Sprite* sprite = nullptr;
+    
+
+    switch (state)
+    {
+    case Frogger::UP:
+        sprite = spriteUp;
+        break;
+    case Frogger::DOWN:
+        sprite = spriteDown;
+        break;
+    case Frogger::LEFT:
+        sprite = spriteLeft;
+        break;
+    case Frogger::RIGHT:
+        sprite = spriteRight;
+        break;
+    default:
+        break;
+    }
+
+    sprite->Draw(x - sprite->Width() / 2.0f, y - sprite->Height() / 2.0f, z);
+}
