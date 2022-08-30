@@ -242,6 +242,12 @@ void Breakout::Init()
     block = new Block(tile5);
     block->MoveTo(window->CenterX() + 290.0f, line5);
     scene->Add(block);
+
+    // -----------------------------------------
+    // player e bola
+
+    scene->Add(new Player);
+
 }
 
 // ------------------------------------------------------------------------------

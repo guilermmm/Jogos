@@ -18,13 +18,32 @@
 #include "Types.h"            // tipos específicos da engine
 #include "Object.h"            // interface de Object
 #include "Sprite.h"            // interface de Sprites
-#include "Player.h"            // jogador do Breakout
 
 // ---------------------------------------------------------------------------------
 
-class Ball 
+class Ball : public Object
 {
+private:
+    Sprite* sprite;
+    float velX, velY;
+    bool started;
+
+public:
+    Ball();
+    ~Ball();
+
+    void Update();
+    void Draw();
+    void Start();
 };
+
+// ---------------------------------------------------------------------------------
+// Funções Membro Inline
+inline void Ball::Draw()
+{
+    sprite->Draw(x, y, z);
+}
+
 
 // ---------------------------------------------------------------------------------
 

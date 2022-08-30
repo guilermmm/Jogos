@@ -18,12 +18,35 @@
 #include "Types.h"          // tipos específicos da engine
 #include "Object.h"         // interface de Object
 #include "Sprite.h"         // interface de Sprites
+#include "Ball.h"
 
 // ---------------------------------------------------------------------------------
 
-class Player 
+class Player : public Object
 {
+private:
+    Sprite* sprite;           
+    Ball* ball;
+    float vel;                 
+    bool keyCtrl;  
+    float centerSprite;
+    
+
+public:
+    Player();
+    ~Player();
+
+    void Update();
+    void Draw();
 };
+
+// ---------------------------------------------------------------------------------
+
+inline void Player::Draw()
+{
+    sprite->Draw(x, y, z);
+}
+
 
 // ---------------------------------------------------------------------------------
 
