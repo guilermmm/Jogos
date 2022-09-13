@@ -14,7 +14,7 @@
 #include "TileSet.h"
 #include "Animation.h"
 #include "Resources.h"
-
+#include "Explosion.h"
 #include "Sprite.h"
 
 // ------------------------------------------------------------------------------
@@ -23,8 +23,7 @@ class Anima : public Game
 {
 private:
     Sprite * sprite = nullptr;          // sprite de fundo
-    TileSet * explosion = nullptr;      // folha de sprites da explosão
-    Animation * anim = nullptr;         // animação da explosão
+    Explosion* exp = nullptr;
     
 
 public:
@@ -39,8 +38,9 @@ public:
 void Anima::Init() 
 {
     sprite = new Sprite("Resources/Background.jpg");
-    explosion = new TileSet("Resources/Explosion.png", 192, 192, 5, 10);
-    anim = new Animation(explosion, 0.120f, true);    
+
+    exp = new Explosion();
+    exp->MoveTo(window->CenterX(), window->CenterY() - 140.0f);
 }
 
 // ------------------------------------------------------------------------------
@@ -51,8 +51,8 @@ void Anima::Update()
     if (window->KeyDown(VK_ESCAPE))
         window->Close();
 
-    // atualiza animação
-    anim->NextFrame();
+    exp->Update();
+    
 } 
 
 // ------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void Anima::Update()
 void Anima::Draw()
 {
     sprite->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
-    anim->Draw(window->CenterX(), window->CenterY() - 140.0f);    
+    exp->Draw();
 } 
 
 // ------------------------------------------------------------------------------
@@ -68,8 +68,7 @@ void Anima::Draw()
 void Anima::Finalize()
 {
     delete sprite;
-    delete explosion;
-    delete anim;
+    delete exp;
 }
 
 

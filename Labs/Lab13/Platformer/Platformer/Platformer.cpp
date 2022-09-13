@@ -27,6 +27,18 @@ void Platformer::Init()
     // pano de fundo do jogo
     backg = new Background();
     scene->Add(backg, STATIC);
+
+    player = new Player();
+    scene->Add(player, MOVING);
+
+    Platform* platform = new Platform(window->CenterX() + 400.0f, window->CenterY() + 100.0f, LARGE);
+    scene->Add(platform, STATIC);
+
+    Platform* platform2 = new Platform(window->CenterX() + 1000.0f, window->CenterY() - 100.0f, LARGE);
+    scene->Add(platform2, STATIC);
+
+    Platform* platform3 = new Platform(window->CenterX() + 1600.0f, window->CenterY() + 100.0f, LARGE);
+    scene->Add(platform3, STATIC);
 }
 
 // ------------------------------------------------------------------------------
@@ -39,6 +51,8 @@ void Platformer::Update()
 
     // atualiza cena do jogo
     scene->Update();
+
+    scene->CollisionDetection();
 } 
 
 // ------------------------------------------------------------------------------
